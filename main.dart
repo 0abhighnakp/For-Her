@@ -5,17 +5,13 @@ void main() => runApp(const MyApp());
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  static const String _title = 'Register/Login';
+  static const String _title = 'For Her';
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: _title,
-      home: Scaffold(
-        backgroundColor: Colors.redAccent,
-        appBar: AppBar(title: const Text(_title)),
-        body: const MyStatefulWidget(),
-      ),
+      home: MyStatefulWidget(),
     );
   }
 }
@@ -27,88 +23,111 @@ class MyStatefulWidget extends StatefulWidget {
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+class _MyStatefulWidgetState extends State<MyStatefulWidget>
+    with SingleTickerProviderStateMixin {
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle = TextStyle(
+    fontSize: 20,
+    fontStyle: FontStyle.italic,
+    height: 1.2,
+  );
+  static const List<Widget> _bodyView = <Widget>[
+    Text(
+      'Write your thoughts                                                              \n\n\n\n\n\n\n',
+      style: optionStyle,
+    ),
+    Text(
+      'Track your cycle                                                                   \n\n\n\n\n\n\n',
+      style: optionStyle,
+    ),
+    Text(
+      'Manage your activities                                                         \n\n\n\n\n\n\n',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(vsync: this, length: 3);
+  }
+
+  Widget _tabItem(Widget child, String label, {bool isSelected = false}) {
+    return AnimatedContainer(
+        margin: EdgeInsets.all(8),
+        alignment: Alignment.center,
+        duration: const Duration(milliseconds: 500),
+        decoration: !isSelected
+            ? null
+            : BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.black,
+              ),
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            child,
+            Text(label, style: TextStyle(fontSize: 8)),
+          ],
+        ));
+  }
+
+  final List<String> _labels = ['Journal', 'Period tracking', 'Tasks'];
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: <Widget>[
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: const Text(
-                  'For Her',
-                  style: TextStyle(
-                      color: Color.blue,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 30),
-                )),
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: const Text(
-                  'Sign in',
-                  style: TextStyle(fontSize: 20),
-                )),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'User Name',
+    List<Widget> _icons = const [
+      Icon(Icons.auto_stories_outlined),
+      Icon(Icons.loyalty_outlined),
+      Icon(Icons.task_alt_outlined),
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('For Her.\nThis is your moment.'),
+      ),
+      body: Center(
+        child: _bodyView.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: Container(
+        height: 100,
+        padding: const EdgeInsets.all(12),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50.0),
+          child: Container(
+            color: Colors.teal.withOpacity(0.1),
+            child: TabBar(
+                onTap: (x) {
+                  setState(() {
+                    _selectedIndex = x;
+                  });
+                },
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.blueGrey,
+                indicator: const UnderlineTabIndicator(
+                  borderSide: BorderSide.none,
                 ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child: TextField(
-                obscureText: true,
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                //forgot password screen
-              },
-              child: const Text(
-                'Forgot Password',
-              ),
-            ),
-            Container(
-                height: 50,
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: ElevatedButton(
-                  child: const Text('Login'),
-                  onPressed: () {
-                    print(nameController.text);
-                    print(passwordController.text);
-                  },
-                )),
-            Row(
-              children: <Widget>[
-                const Text('Does not have account?'),
-                TextButton(
-                  child: const Text(
-                    'Sign in',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  onPressed: () {
-                    //signup screen
-                  },
-                )
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-            ),
-          ],
-        ));
+                tabs: [
+                  for (int i = 0; i < _icons.length; i++)
+                    _tabItem(
+                      _icons[i],
+                      _labels[i],
+                      isSelected: i == _selectedIndex,
+                    ),
+                ],
+                controller: _tabController),
+          ),
+        ),
+      ),
+    );
   }
 }
