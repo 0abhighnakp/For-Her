@@ -40,6 +40,11 @@ To run this project, you will need to add the following environment variables to
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
+## Logo
+![WhatsApp Image 2022-12-17 at 15 59 26](https://user-images.githubusercontent.com/119423795/208285648-8ad056cc-fb98-4874-848d-5a900293af15.jpeg)
+
+
+
 ## Screenshots
 ![WhatsApp Image 2022-12-18 at 12 10 49 (3)](https://user-images.githubusercontent.com/119423795/208285600-4e80609d-a939-4870-9e8e-6ef8637bfad5.jpeg)
 ![WhatsApp Image 2022-12-18 at 12 10 49 (2)](https://user-images.githubusercontent.com/119423795/208285602-ce43c7d2-fd55-443a-8538-6745b605bacf.jpeg)
